@@ -35,8 +35,10 @@ import socket
 #TODO make these arguments??? -> dynamic 
 TCP_IP = '127.0.0.1'
 TCP_PORT = int(args["listenport"])
-BUFFER_SIZE = 1024*4 # Normally 1024, but we want fast response
+BUFFER_SIZE = 1024*8 #8 gaat? safer is lower Normally 1024, but we want fast response
 
+
+## TODO HERE IS PROBLEM
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((TCP_IP, TCP_PORT))
 
@@ -45,15 +47,28 @@ def listen():
     global conn
     global addr
     conn, addr = s.accept()
+    global connection_dead
+    connection_dead=False
     print 'Connection address:', addr
+    global ID
+    ID = random_generator20()
 
 listen()
-ID = random_generator20()
 
 ###HTTP
 http_conn = httplib.HTTPSConnection(args["remote"])
 try:
     while 1:#infinite
+            #test if still alive
+            try:
+                conn.send("")#test this??
+            except:
+                pass
+                connection_dead=True
+
+            if connection_dead:
+                listen()
+
             data = ""
             conn.settimeout(0.6)
             try:
@@ -71,14 +86,24 @@ try:
             data1 = r1.read()#data1 is the full html page
             parser.resp=""
             parser.feed(data1)
-            #TODO retry if no title found
+            
+            #TODO EVERY RECV EN send IN TEST FOR CONNECTION OUT
             if len(parser.resp) != 0:
-                response=base64.b64decode(parser.resp)
-                conn.send(response)  # send response
+                try:
+                    response=base64.b64decode(parser.resp)
+                except:
+                    response = ""
+                    pass 
+                try:
+                    conn.send(response)  # send response
+                except:
+                    pass
+                    connection_dead=True
             
 except:
     raise
     pass
-conn.close()
+s.close()
+conn.close() #close
 #TODO when close??? keyboardexception of quit?
 http_conn.close()
