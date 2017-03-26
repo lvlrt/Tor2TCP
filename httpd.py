@@ -18,10 +18,9 @@ PORT_NUMBER = int(args["port"])
 #TODO PARS
 TCP_IP = '127.0.0.1'
 TCP_PORT = int(args["targetport"])
-BUFFER_SIZE = 1024*2 #2 is ook goed#SPEED???? *50
+BUFFER_SIZE = 1024*50 #2 is ook goed#SPEED???? *50
 
-tcpsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-tcpsocket.connect((TCP_IP, TCP_PORT))
+ID_dict=dict()
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_HEAD(s):
@@ -40,6 +39,15 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 	
 	#DIFFERENT CASES
 	if splitted_path[2] == "ID": #A PACKET WITH IDENTIFIER
+		#IF NEW ID
+		if splitted_path[3] not in ID_dict:
+			print "created connection"
+			ID_dict[splitted_path[3]] = "" #add obecht here later 
+			global tcpsocket
+			tcpsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+			tcpsocket.connect((TCP_IP, TCP_PORT))
+		
+		
 		message = ""
 		try: #if base64 command fails
 			#if there is a message present to send
