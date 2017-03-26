@@ -1,0 +1,9 @@
+ADRESS ALREADY taken on tcp when fails
+
+client: if connection times out, listen again, (or close first)
+
+speep up the connection, or make more stable?? only change time-outs,
+
+multiple connections on httpd
+
+keep alive
