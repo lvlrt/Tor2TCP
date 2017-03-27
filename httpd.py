@@ -28,26 +28,17 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s.send_header("Content-type", "text/html")
         s.end_headers()
     def do_GET(s): #IF MESSAGE, THIS WILL TRIGGER, but what if multiple responses,, loop until buffersize?:w
-   
-   	## TODO IGNORE OTHER REQUESTS
-	#GET MESSAGE FROM URL
-	#TODO ID PORT(for http request with the url behind), Client(download latest client), target
-	
-	#splitted in pieces, first one is ""
-	#second one is alway different to prevent caching
 	splitted_path = s.path.split("/",4)
-	
 	#DIFFERENT CASES
 	if splitted_path[2] == "ID": #A PACKET WITH IDENTIFIER
 		#IF NEW ID
+		#TODO IDS en connections in DIC
 		if splitted_path[3] not in ID_dict:
 			print "created connection"
 			ID_dict[splitted_path[3]] = "" #add obecht here later 
 			global tcpsocket
 			tcpsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			tcpsocket.connect((TCP_IP, TCP_PORT))
-		
-		
 		message = ""
 		try: #if base64 command fails
 			#if there is a message present to send
@@ -76,8 +67,14 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         	s.wfile.write("<html><head><title>"+encoded+"</title></head>")#REPSONSE here
         	s.wfile.write("<body><p></p>")
         	s.wfile.write("</body></html>")
-	#i#elif splitted_path[2] ==
+	elif splitted_path[2] == "CLIENT": #return the newest client (from this folder,TODO if not found? -> use raw github??
+        	s.send_response(200)
+        	s.send_header("Content-type", "application/octet-stream")
+        	s.end_headers()
+		f = open('tcphttp.py', 'r')
+        	s.wfile.write(f.read())#REPSONSE here
 
+	elif splitted_path[2] == "FORWARD" #forward to another port http server request
 
 if __name__ == '__main__':
     server_class = BaseHTTPServer.HTTPServer

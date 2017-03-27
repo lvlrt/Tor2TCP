@@ -7,3 +7,5 @@ speep up the connection, or make more stable?? only change time-outs,
 multiple connections on httpd
 
 keep alive
+
+Later groter script dat automatisch 2 instances start, en 2 listeners op 2 verschillende poorten -> TARGET WEL IMPLEMENTEREN?
