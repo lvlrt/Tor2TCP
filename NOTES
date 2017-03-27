@@ -1,11 +1,14 @@
-ADRESS ALREADY taken on tcp when fails
-
-client: if connection times out, listen again, (or close first)
+tcp if title not a b64 string, request again??? or give an error not reachable ogf foute info
 
 speep up the connection, or make more stable?? only change time-outs,
 
-multiple connections on httpd
+multiple connections on httpd -> have list of connection
 
 keep alive
 
-Later groter script dat automatisch 2 instances start, en 2 listeners op 2 verschillende poorten -> TARGET WEL IMPLEMENTEREN?
+Later groter script dat automatisch 2 instances start, en 2 listeners op 2 verschillende poorten -> TARGET WEL IMPLEMENTEREN? -> vooor automatisch deployment, voor linux en voor windows, dat alleen da HID  #uitdenken
+
+
+Windows exe maken van client,
+
+in hid scripten dat socket eerst is gemaakt??? of background process aan zetten, maar op fail van 1 van de 2 wel allebei failen?
