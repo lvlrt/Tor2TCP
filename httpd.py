@@ -7,7 +7,7 @@ import httplib
 #PARSER
 import argparse
 
-parser = argparse.ArgumentParser(description='Server side program to work over http proxies; \nFor tunneling TCP you need the client: \nURL: "http://<server-url>/randomstring(for anti-caching)/CLIENT" returns the client in a download; \nURL: "http://<server-url>/randomstring(anti-caching)/FORWARD/<port>/<path>/" forwards http request to another server on the local machine') 
+parser = argparse.ArgumentParser(description='Server side program to work over http proxies; \nFor tunneling TCP you need the client: \nURL: "http://<server-url>/randomstring(for anti-caching)/CLIENT(EXE)" returns the client in a download; \nURL: "http://<server-url>/randomstring(anti-caching)/FORWARD/<port>/<path>/" forwards http request to another server on the local machine') 
 parser.add_argument('-p','--port', help='Port to run the http server on ex. 8000', required=True)
 parser.add_argument('-t','--targetport', help='TCP port to forward to on localhost ex. 2022', required=True)
 args = vars(parser.parse_args())
@@ -78,7 +78,13 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         		s.end_headers()
 			f = open('tcphttp.py', 'r')
         		s.wfile.write(f.read())#repsonse here
-
+		elif splitted_path[2] == "CLIENTEXE": #return the newest client (from this folder,TODO if not found? -> use raw github??
+			#URL: /randomstring/CLIENT -> returns the client to do tcp forwarding
+        		s.send_response(200)
+        		s.send_header("content-type", "application/octet-stream")
+        		s.end_headers()
+			f = open('tcphttp.exe', 'r')
+        		s.wfile.write(f.read())#repsonse here
 		elif splitted_path[2] == "FORWARD": #forward to another port http server request
         		#URL: /randomstring/FORWARD/<PORT>/<PATH>
 			if len(splitted_path) > 4:
